@@ -1,0 +1,33 @@
+{% extends "sentiment/layout.html" %}
+
+{% block title %}
+    Sentiment Analysis
+{% endblock %}
+
+
+{% block body %}
+
+
+<div class="container">
+  <form method="POST" action="{% url 'index' %}" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="form-group">
+      <input
+        type="file"
+        name="myfile"
+        class="form-control-file"
+        style="padding-bottom: 15px"
+        id="csvFileInput"
+        required
+      />
+    </div>
+    <button type="submit" class="btn btn-primary mb-2">Submit</button>
+  </form>
+
+  <div class="card" style="width: 100; overflow: scroll">
+    <div class="card-body">
+      <table id="csvRoot"></table>
+    </div>
+  </div>
+</div>
+{% endblock %}

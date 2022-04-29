@@ -1,0 +1,172 @@
+{% extends "sentiment/layout.html" %}
+
+{% block title %}
+    Sentiment
+{% endblock %}
+{% block body %}
+
+<div class="container">
+
+    <div class="row">
+
+        <div class="col">
+            <div class="shadow p-3 mb-5 bg-white rounded">
+                <div class="col">
+                    <div class="card-body">
+
+                        <form action="{% url 'test-input' %}" id="formdata" method="POST" class="contactForm">
+
+                            <label style="padding-top: 15px" class="sr-only">Select Model</label>
+                            <select name="selectCourse" id="modelName" class="form-select" aria-label="Default select example" Required>
+                                <option disabled selected value> -- Select Model -- </option>
+                                    <option value="ridgeClass">Ridge Classifer</option>
+                                    <option value="randomForest">Random Forest</option>
+                                    <option value="kNeighbors">k Neighbors Classifier</option>
+                                    <option value="SVC">SVC</option>                                    
+                            </select>
+
+                            <label style="padding-top: 15px" class="sr-only">Enter Text</label>
+                            <div class="form-group">
+                              <textarea class="form-control" id="inputtext" aria-describedby="inputTextHelp" placeholder="Enter Text" rows="5" required></textarea>
+                              <small id="inputTextHelp" class="form-text text-muted">Enter text to Check Sentiment.</small>
+                            </div>
+                            <button type="submit" id="submitData" class="btn btn-primary">Submit</button>
+
+                          </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col" id="display-output">
+        </div>
+
+    </div>
+  
+
+</div>
+
+<!-- <div class="shadow p-3 mb-5 bg-white rounded">
+    <div class="col">
+        <div class="text-center">
+            <div class="card-body">
+                <h5 class="card-title" id="output-model">Random Forest</h5>
+                <p id="output-sentiment"><span class="positive">😃</span></p>
+                <p class="card-text" id="output-text">Phone is good</p>
+                <div class="alert alert-success" role="alert">
+                    Positive
+                </div>
+            </div>
+        </div>
+    </div>
+</div> -->
+
+<script type="text/javascript">
+
+    document.getElementById("formdata").addEventListener("submit", function(e){
+        e.preventDefault();
+
+        modelName = document.getElementById("modelName").value;
+        inputText = document.getElementById("inputtext").value;
+
+        const formData = new FormData();
+
+        formData.append('modelName', modelName);
+        formData.append('inputText', inputText);
+        formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+
+        fetch('{% url "test-input" %}', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Success : ', data);
+            document.getElementById("inputtext").value = "";
+            document.getElementById("modelName").value = "";
+            document.getElementById("display-output").innerHTML = "";
+
+            const sentimentOutput = document.createElement('div');
+
+            if ( data.sentiment == "Positive" )
+            {
+                sentimentOutput.innerHTML = `
+                    <div class="shadow p-3 mb-5 bg-white rounded">
+                        <div class="col">
+                            <div class="text-center">
+                                <div class="card-body">
+                                    <h5 class="card-title" id="output-model">${data.name}</h5>
+                                    <p id="output-sentiment"><span class="positive">😃</span></p>
+                                    <p class="card-text" id="output-text">${data.input}</p>
+                                    <div class="alert alert-success" role="alert">
+                                        ${data.sentiment}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `
+            }
+            else if ( data.sentiment == "Neutral" )
+            {
+                sentimentOutput.innerHTML = `
+                    <div class="shadow p-3 mb-5 bg-white rounded">
+                        <div class="col">
+                            <div class="text-center">
+                                <div class="card-body">
+                                    <h5 class="card-title" id="output-model">${data.name}</h5>
+                                    <p id="output-sentiment"><span class="Neutral">😐</span></p>
+                                    <p class="card-text" id="output-text">${data.input}</p>
+                                    <div class="alert alert-success" role="alert">
+                                        ${data.sentiment}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `
+            }
+            else
+            {
+                sentimentOutput.innerHTML = `
+                    <div class="shadow p-3 mb-5 bg-white rounded">
+                        <div class="col">
+                            <div class="text-center">
+                                <div class="card-body">
+                                    <h5 class="card-title" id="output-model">${data.name}</h5>
+                                    <p id="output-sentiment"><span class="Negative">😡</span></p>
+                                    <p class="card-text" id="output-text">${data.input}</p>
+                                    <div class="alert alert-success" role="alert">
+                                        ${data.sentiment}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `
+            }
+            document.getElementById("display-output").append(sentimentOutput)
+
+
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            document.getElementById("output-message").innerText = "Sorry! There was an error submitting your enquiry. "
+            setTimeout(function(){ 
+            document.getElementById("output-message").style.display = "none";
+            }, 3000);
+            setTimeout(function(){ 
+            document.getElementById("output-message").style.display = "";
+            }, 1000);
+
+});
+    });
+
+</script>
+
+{% endblock %}
+
+
+<!-- 😃 positive -->
+<!-- 😐 neutral -->
+<!-- 😡 negative -->

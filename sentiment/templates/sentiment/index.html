@@ -1,0 +1,126 @@
+{% extends "sentiment/layout.html" %}
+
+{% block title %}
+      Sentiment
+{% endblock %}
+
+
+{% block body %}
+
+
+{{ data|json_script:"hello-data-1" }}
+{{ final_rating_count|json_script:"hello-data-2" }}
+{{ reviewCount|json_script:"r_c_count" }}
+
+{{ g_data|json_script:"g_data" }}
+{{ k_data|json_script:"k_data" }}
+{{ r_data|json_script:"r_data" }}
+{{ s_data|json_script:"s_data" }}
+
+
+<div class="container">    
+
+  
+    <div class="row">
+      <div class="col">
+        <div class="shadow p-3 mb-5 bg-white rounded">
+          <div class="col">
+            <div class="card-body">
+              <canvas id="ratingChart" width="200" height="100"></canvas>
+            </div>
+          </div>
+        </div>
+      
+      </div>
+
+    {% comment %} Review Rating Trend {% endcomment %}
+    <div class="col">
+    
+      <div class="shadow p-3 mb-5 bg-white rounded">
+        <div class="col">
+          <div class="card-body">
+            <canvas id="lineChart" width="200" height="100"></canvas>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="w-100"></div>
+
+    {% comment %} 3 {% endcomment %}
+    <div class="col">
+      <div class="shadow p-3 mb-5 bg-white rounded">
+        <div class="col">
+          <div class="card-body">
+            <canvas id="barChart1" width="150" height="200"></canvas>
+            <h4><center>Accuracy - 99.50%</center></h4>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col">
+      <div class="shadow p-3 mb-5 bg-white rounded">
+        <div class="col">
+          <div class="card-body">
+            <canvas id="barChart2" width="150" height="200"></canvas>
+            <h4><center>Accuracy - 98.20%</center></h4>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="col">
+      <div class="shadow p-3 mb-5 bg-white rounded">
+        <div class="col">
+          <div class="card-body">
+            <canvas id="barChart3" width="150" height="200"></canvas>
+            <h4><center>Accuracy - 83.30%</center></h4>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="col">
+      <div class="shadow p-3 mb-5 bg-white rounded">
+        <div class="col">
+          <div class="card-body">
+            <canvas id="barChart4" width="150" height="200"></canvas>
+            <h4><center>Accuracy - 98.10%</center></h4>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+
+    <!-- Review Month wise Count -->
+
+    
+</div>
+
+<div class="col">
+    
+  <div class="shadow p-3 mb-5 bg-white rounded">
+    <div class="col">
+      <div class="card-body">
+        <canvas id="reviewMCount" width="200" height="100"></canvas>
+
+        <select class="month" >
+
+          {% for key, value in reviewCount.items %}
+            <option value="{{ forloop.counter0 }}">{{key}}</option>
+          {% endfor %}
+          
+        </select>
+
+
+      </div>
+    </div>
+  </div>
+
+</div>
+</div>
+{% endblock %}
