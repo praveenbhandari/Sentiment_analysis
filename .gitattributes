@@ -1,3 +1,6 @@
+<<<<<<< HEAD
 '*.sav' filter=lfs diff=lfs merge=lfs -text
+=======
+>>>>>>> master
 *.sav filter=lfs diff=lfs merge=lfs -text
 .sav filter=lfs diff=lfs merge=lfs -text

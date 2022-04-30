@@ -110,7 +110,9 @@ def index(request):
         global s_negi_cc 
         global s_neut_cc
         global ii
-        for i in data["Review"][:10 ]:
+
+        for i in data["Review"]:
+
             # for j in range(10):
             ii += 1
             print(ii)
